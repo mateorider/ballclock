@@ -11,6 +11,7 @@ func validateBallInput(count int) {
     if count < 27 || count > 127 {
         log.Fatal("'balls' must be a valid number between 27 and 127")
     }
+    return
 }
 
 func main() {
