@@ -7,9 +7,9 @@ import (
     "github.com/rider-mateo/ballclock/modes"
 )
 
-func validateBallInput(count int) {
-    if count < 27 || count > 127 {
-        log.Fatal("'balls' must be a valid number between 27 and 127")
+func validateFlagInput(name string, count, lower, upper int) {
+    if count < lower || count > upper {
+        log.Fatalf("%s must be a number between %d and %d", name, lower, upper)
     }
     return
 }
@@ -20,8 +20,10 @@ func main() {
     minutes := flag.Int("minutes", 720, "Duration to run in minutes, Valid numbers between 720 and 1440. MODE 2 ONLY")
 
     flag.Parse()
-
-    validateBallInput(*balls)
+    
+    validateFlagInput("mode", *mode, 1, 2)
+    validateFlagInput("balls", *balls, 27, 127)
+    validateFlagInput("minutes", *minutes, 720, 1440)
 
     if *mode == 1 {
 
@@ -30,15 +32,11 @@ func main() {
         fmt.Printf("%v balls cycle after %v days.\n", *balls, iDays)
         fmt.Printf("Completed in %0.1f miliseconds (%0.3f seconds)", fSeconds*1000, fSeconds)
 
-    } else if *mode == 2 {
+    } else {
 
         clock := modes.Mode2(*balls, *minutes)
 
         fmt.Println(clock.ToString())
     
-    } else {
-
-        log.Fatal("Invalid mode provided. Should be 1 or 2")
-
-    }
+    } 
 }
