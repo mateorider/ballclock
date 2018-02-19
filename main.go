@@ -7,6 +7,9 @@ import (
     "github.com/rider-mateo/ballclock/modes"
 )
 
+// validateFlagInput takes the name of a flag, the value from the flag, the lower bound, and the 
+// upper bound to check if the flag input falls within the valid range for the program. Logs the
+// error message and exits the program if the value is outside of the acceptable range.
 func validateFlagInput(name string, count, lower, upper int) {
     if count < lower || count > upper {
         log.Fatalf("%s must be a number between %d and %d", name, lower, upper)

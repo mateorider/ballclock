@@ -45,7 +45,7 @@ func Mode2(iBalls int, minuteCount int) clock.BallClock {
     var ballClock clock.BallClock
     ballClock.Init(iBalls)
 
-    // Iterate until minCount is reached
+    // Iterate until minuteCount is reached
     for i := 1; i <= minuteCount; i++ {
         ballClock.StepOneMinute()
     }

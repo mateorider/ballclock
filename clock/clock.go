@@ -2,10 +2,17 @@ package clock
 
 import "encoding/json"
 
+// BallClock represents a ball clock with four trays (slices): 
+// (1) Min holds balls that represent individual minutes passed
+// (2) FiveMin holds balls that represent 5-minutes periods
+// (3) Hour holds balls for the # of hours passed
+// (4) Main holds any unused balls 
 type BallClock struct {
     Min, FiveMin, Hour, Main []int
 }
 
+// Init initializes the state of the ballclock, taking an integer that represents the number of
+// balls to be used in the clock.
 func (c *BallClock) Init(iBalls int) {
     // initial state
     c.Min     = []int{}
@@ -19,66 +26,62 @@ func (c *BallClock) Init(iBalls int) {
     }
 }
 
+// PopBall removes and returns the first ball from the Main slice
 func (c *BallClock) PopBall() int{
-    // get the first ball from Main
     firstBall := c.Main[0]
-    // remove that ball from Main
     c.Main = removeIndex(c.Main, 0)
     return firstBall
 }
 
+// AddMinute adds a ball to the Min slice. If the slice is full, the contents of the slice are
+// reversed, emptied from Min and appended to the Main slice while a single ball is added to the 
+// FiveMin slice.
 func (c *BallClock) AddMinute(iBall int) {
     if len(c.Min) == 4 {
-        // reverse the order of the Min balls
         reversedMin := reverseSlice(c.Min)
-        // clear Min queue
         c.Min = []int{}
-        // append the reversed Min balls to Main
         c.Main = append(c.Main, reversedMin...)
-        // add a ball to FiveMin
         c.AddFiveMin(iBall)
     } else {
-        // add a new ball to Min
         c.Min = append(c.Min, iBall)
     }
 }
 
+// AddFive adds a ball to the FiveMin slice. If the slice is full, the contents of the slice are
+// reversed, emptied from FiveMin and appended to the Main slice while a single ball is added to the 
+// Hour slice.
 func (c *BallClock) AddFiveMin(iBall int) {
     if len(c.FiveMin) == 11 {
-        // drop balls back in q
         reversedFiveMin := reverseSlice(c.FiveMin)
-        // clear the FiveMin q
         c.FiveMin = []int{}
-        // append the balls from FiveMin onto Main in reverse order
         c.Main = append(c.Main, reversedFiveMin...)
-        // add a ball to Hour
         c.AddHour(iBall)
     } else {
-        // add a new ball to FiveMin
         c.FiveMin = append(c.FiveMin, iBall)
     }
 }
 
+// AddHour adds a ball to the Hour slice. If the slice is full, all slices must be emptied into 
+// the Main slice to reset the clock. The reversed Hour slice is appeneded to Main, followed by the
+// added ball. 
 func (c *BallClock) AddHour(iBall int) {
     if len(c.Hour) == 11 {
-        // append the balls to Main first on this this time
         reversedHour := reverseSlice(c.Hour)
         c.Main = append(c.Main, reversedHour...)
         c.Main = append(c.Main, iBall)
-        // clear the Hour q last
         c.Hour = []int{}
     } else {
         c.Hour = append(c.Hour, iBall)
     }
 }
 
+// StepOneMinute retrieves a ball from the Main slice and adds it to the Min slice.
 func (c *BallClock) StepOneMinute() {
-    // Get a ball from Main
     nextBall := c.PopBall()
-    // Pass that ball into Add Min
     c.AddMinute(nextBall)
 }
 
+// ToString returns a string representation of the BallClock's state (ordering) in JSON format. 
 func (c *BallClock) ToString() string{
     jsonBytes, err := json.Marshal(c)
 
@@ -88,10 +91,6 @@ func (c *BallClock) ToString() string{
 
     return string(jsonBytes)
 }
-
-// --------------------------------
-//  UTILS
-// --------------------------------
 
 // reverseSlice takes a slice and returns a reverse copy of it
 func reverseSlice(original []int) []int {
