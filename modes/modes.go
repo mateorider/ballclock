@@ -35,3 +35,20 @@ func Mode1 (iBalls int) (int, float64) {
 
     return days, seconds
 }
+
+// Mode2 takes two parameters, the number of balls and the number of minutes to run for. If the
+// number of minutes is specified, the clock must run to the number of minutes and report the state 
+// of the tracks at that point in a JSON format.
+func Mode2(iBalls int, minuteCount int) clock.BallClock {
+    
+    // create one new instance of BallClock
+    var ballClock clock.BallClock
+    ballClock.Init(iBalls)
+
+    // Iterate until minCount is reached
+    for i := 1; i <= minuteCount; i++ {
+        ballClock.StepOneMinute()
+    }
+
+    return ballClock
+}

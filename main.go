@@ -17,7 +17,7 @@ func validateBallInput(count int) {
 func main() {
     mode    := flag.Int("mode", 1, "The mode the clock will operate in where: 1 = cycledays, 2 = clock state")
     balls   := flag.Int("balls", 27, "The number of balls to be used in the clock. Valid numbers between 27 and 127.")
-    minutes := flag.Int("minutes", 720, "Duration to run in minutes, MODE 2 ONLY, ")
+    minutes := flag.Int("minutes", 720, "Duration to run in minutes, Valid numbers between 720 and 1440. MODE 2 ONLY")
 
     flag.Parse()
 
@@ -32,11 +32,13 @@ func main() {
 
     } else if *mode == 2 {
 
-        fmt.Println("mode 2 using", *balls, *minutes)
+        clock := modes.Mode2(*balls, *minutes)
 
+        fmt.Println(clock.ToString())
+    
     } else {
 
-        fmt.Println("not a valid mode")
+        log.Fatal("Invalid mode provided. Should be 1 or 2")
 
     }
 }
