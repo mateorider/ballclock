@@ -10,14 +10,14 @@ import (
 // given in the input and the number of days (24-hour periods) which elapse before the clock returns
 // to its initial ordering. 
 // Returns days int, seconds float64
-func Mode1 (iBalls int) (int, float64) {
+func Mode1 (ballCount int) (int, float64) {
     start := time.Now()
     days := 0
 
     // create a two instances of BallClock, one to iterate and one to compare to
     var ballClock, initialOrdering clock.BallClock
-    ballClock.Init(iBalls)
-    initialOrdering.Init(iBalls)
+    ballClock.Init(ballCount)
+    initialOrdering.Init(ballCount)
 
     // Offset the states
     ballClock.StepOneMinute()
@@ -39,11 +39,11 @@ func Mode1 (iBalls int) (int, float64) {
 // Mode2 takes two parameters, the number of balls and the number of minutes to run for. If the
 // number of minutes is specified, the clock must run to the number of minutes and report the state 
 // of the tracks at that point in a JSON format.
-func Mode2(iBalls int, minuteCount int) clock.BallClock {
+func Mode2(ballCount int, minuteCount int) clock.BallClock {
     
     // create one new instance of BallClock
     var ballClock clock.BallClock
-    ballClock.Init(iBalls)
+    ballClock.Init(ballCount)
 
     // Iterate until minuteCount is reached
     for i := 1; i <= minuteCount; i++ {
