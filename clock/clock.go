@@ -1,5 +1,7 @@
 package clock
 
+import "encoding/json"
+
 type BallClock struct {
     Min, FiveMin, Hour, Main []int
 }
@@ -75,6 +77,16 @@ func (c *BallClock) StepOneMinute() {
     nextBall := c.PopBall()
     // Pass that ball into Add Min
     c.AddMinute(nextBall)
+}
+
+func (c *BallClock) ToString() string{
+    jsonBytes, err := json.Marshal(c)
+
+    if err != nil {
+        panic(err)
+    }
+
+    return string(jsonBytes)
 }
 
 // --------------------------------
